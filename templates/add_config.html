@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html>
+{% load staticfiles %}
+<link href="{%static "css/bootstrap/bootstrap.min.css" %}" rel="stylesheet" type="text/css" >
+<link href="{%static "css/bootstrap/bootstrap-table.css" %}" rel="stylesheet" type="text/css" >
+<link href="{%static "css/adstyle.css" %}" rel="stylesheet" type="text/css" />
+
+{% include "header.html" %}
+{% include 'menu.html' %}
+{% csrf_token %}
+<body>
+<div class="home">
+    <div class="home_right">
+        <div class="homepage">
+            <div class="pagename" align="center">网站信息</div>
+        </div>
+        <div class="user_hr">
+        </div>
+        <div class="user_list">
+            <div class="user_list_ls">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="background-color: #31b0d5">
+                        网站信息
+                    </div>
+                   <div class="panel-body form-group" style="margin-bottom:0px;">
+                        <label class="col-sm-1 control-label" style="text-align: right; margin-top:10px">site_name：</label>
+                        <div class="col-sm-2">
+                            <input type="text" placeholder="必需" class="form-control" id="site_name" value="{{ site_name }}"/>
+                        </div>
+                        <label class="col-sm-1 control-label" style="text-align: right; margin-top:10px">channel：</label>
+                        <div class="col-sm-2">
+                            <input type="text" placeholder="必需" class="form-control" id="channel" value="{{ channel }}"/>
+                        </div>
+                        <label class="col-sm-1 control-label" style="text-align: right; margin-top:10px">categories：</label>
+                        <div class="col-sm-2">
+                            <input type="text" placeholder="数组" class="form-control" id="categories" value="{{ categories }}"/>
+                        </div>
+                        <label class="col-sm-1 control-label" style="text-align: right; margin-top:10px">news_type：</label>
+                        <select class="col-sm-1" id="news_type" style="margin-left: 5px;margin-top: 5px">
+                            <option value="1">1</option>
+                            <option value="3">3</option>
+                            <option value="5">5</option>
+                            <option value="9">9</option>
+                        </select>
+                        <!--<div class="col-sm-1 col-sm-offset-2">-->
+                            <!--<button class="btn btn-primary" id="test_btn">测试</button>-->
+                        <!--</div>-->
+            </div>
+                </div>
+            <div class="panel panel-default">
+                <div class="panel-heading" style="background-color: #31b0d5">
+                    start_url字段配置
+                </div>
+                <div class="panel-body form-group" style="margin-bottom:0px;">
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:10px">start_url：</label>
+                        <div class="col-sm-7" style="height: 10px">
+                            <input type="url" placeholder="必需" class="form-control" id="start_url" value="{{ start_url }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:10px">req_type：</label>
+                        <select class="col-sm-1" id="start_url_req_type" style="margin-top: 5px">
+                            <option value="GET">GET</option>
+                            <option value="POST">POST</option>
+                        </select>
+                    <div class="col-lg-12 url-wrapper"></div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">timestp：</label>
+                        <select class="col-sm-1" id="timestamp">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                        </select>
+                    <label class="col-lg-1 control-label" style="text-align: right; margin-top:5px">web_type：</label>
+                        <select class="col-lg-1" id="start_web_type">
+                            <option value="xpath">xpath</option>
+                            <option value="re">re</option>
+                        </select>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">headers：</label>
+                        <div class="col-lg-4" style="height: 5px">
+                            <input type="text" class="form-control" id="start_headers" style="margin-top: -5px" value="{{ start_headers }}"/>
+                        </div>
+                    <div class="col-lg-12 url-wrapper"></div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">urlls_re：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" class="form-control" id="urllist_re" style="margin-top: -5px" value="{{ urllist_re }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">urlls_xpath：</label>
+                        <div class="col-lg-2" style="height: 5px">
+                            <input type="text" class="form-control" placeholder="数组" id="urllist_xpath" style="margin-top: -5px" value="{{ urllist_xpath }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">urlls_add：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" class="form-control" id="urllist_add" style="margin-top: -5px" value="{{ urllist_add }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">urlls_reduce：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" placeholder="数组" class="form-control" id="urllist_reduce" style="margin-top: -5px" value="{{ urllist_reduce }}"/>
+                        </div>
+                    <div class="col-lg-12 url-wrapper"></div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">imgls_xpath：</label>
+                        <div class="col-lg-3" style="height: 5px">
+                            <input type="text" placeholder="数组" class="form-control" id="imglist_xpath" style="margin-top: -5px" value="{{ imglist_xpath }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">url_add：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" class="form-control" id="imglist_url_add" style="margin-top: -5px" value="{{ imglist_url_add }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">url_reduce：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" placeholder="数组" class="form-control" id="imglist_url_reduce" style="margin-top: -5px" value="{{ imglist_url_reduce }}"/>
+                        </div>
+                    <div class="col-lg-12 url-wrapper"></div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">img_add：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" class="form-control" id="imglist_img_add" style="margin-top: -5px" value="{{ imglist_img_add }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">img_reduce：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" placeholder="数组" class="form-control" id="imglist_img_reduce" style="margin-top: -5px" value="{{ imglist_img_reduce }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">img_sign：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" class="form-control" id="img_sign" style="margin-top: -5px" value="{{ img_sign }}"/>
+                        </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading" style="background-color: #31b0d5">
+                    detail_url字段配置
+                </div>
+                <div class="panel-body form-group" style="margin-bottom:0px;">
+                    <label class="col-sm-1" style="text-align: right; margin-top:10px">url_sign：</label>
+                        <div class="col-sm-2">
+                            <input type="text" placeholder="必需" style="margin-top: -5px" class="form-control" id="url_sign" value="{{ url_sign }}"/>
+                        </div>
+                    <label class="col-lg-1 control-label" style="text-align: right; margin-top:5px">web_type：</label>
+                        <select class="col-lg-1" id="detail_web_type">
+                            <option value="xpath">xpath</option>
+                            <option value="re">re</option>
+                        </select>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">req_type：</label>
+                        <select class="col-sm-1" id="detail_url_req_type">
+                            <option value="GET">GET</option>
+                            <option value="POST">POST</option>
+                        </select>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">headers：</label>
+                        <div class="col-lg-3" style="height: 5px">
+                            <input type="text" class="form-control" id="detail_url_headers" style="margin-top: -5px" value="{{ detail_url_headers }}"/>
+                        </div>
+                    <!--title-->
+                    <div class="col-lg-12 url-wrapper"></div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">tit_re：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" class="form-control" id="title_re" style="margin-top: -5px" value="{{ title_re }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">tit_xpath：</label>
+                        <div class="col-lg-2" style="height: 5px">
+                            <input type="text" placeholder="数组" class="form-control" id="title_xpath" style="margin-top: -5px" value="{{ title_xpath }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">tit_add：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" class="form-control" id="title_add" style="margin-top: -5px" value="{{ title_add }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">tit_reduce：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" placeholder="数组" class="form-control" id="title_reduce" style="margin-top: -5px" value="{{ title_reduce }}"/>
+                        </div>
+                    <!--content-->
+                    <div class="col-lg-12 url-wrapper"></div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">cont_re：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" class="form-control" id="content_re" style="margin-top: -5px" value="{{ content_re }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">cont_xpath：</label>
+                        <div class="col-lg-2" style="height: 5px">
+                            <input type="text" placeholder="数组" class="form-control" id="content_xpath" style="margin-top: -5px" value="{{ content_xpath }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">reduce_node：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" placeholder="数组" class="form-control" id="reduce_node" style="margin-top: -5px" value="{{ reduce_node }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">cont_reduce：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" placeholder="数组" class="form-control" id="cont_reduce" style="margin-top: -5px" value="{{ cont_reduce }}"/>
+                        </div>
+                    <!--image-->
+                    <div class="col-lg-12 url-wrapper"></div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">img_suffix：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" class="form-control" id="img_suffix" style="margin-top: -5px" value="{{ img_suffix }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">img_add：</label>
+                        <div class="col-lg-2" style="height: 5px">
+                            <input type="text" class="form-control" id="img_add" style="margin-top: -5px" value="{{ img_add }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">img_reduce：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" placeholder="数组" class="form-control" id="img_reduce" style="margin-top: -5px" value="{{ img_reduce }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">time_fmt：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" class="form-control" id="img_time_format" style="margin-top: -5px" value="{{ img_time_format }}"/>
+                        </div>
+                    <!--next_page-->
+                    <div class="col-lg-12 url-wrapper"></div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">next_sign：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" class="form-control" id="next_page_sign" style="margin-top: -5px" value="{{ next_page_sign }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">next_re：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" class="form-control" id="next_page_re" style="margin-top: -5px" value="{{ next_page_re }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">next_xpath：</label>
+                        <div class="col-lg-2" style="height: 5px">
+                            <input type="text" placeholder="数组" class="form-control" id="next_page_xpath" style="margin-top: -5px" value="{{ next_page_xpath }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">next_reduce：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" placeholder="数组" class="form-control" id="next_page_reduce" style="margin-top: -5px" value="{{ next_page_reduce }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">page_format：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" class="form-control" id="next_page_format" style="margin-top: -5px" value="{{ next_page_format }}"/>
+                        </div>
+                    <!--pubtime-->
+                    <div class="col-lg-12 url-wrapper"></div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">pub_re：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" class="form-control" id="pubtime_re" style="margin-top: -5px" value="{{ pubtime_re }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">pub_xpath：</label>
+                        <div class="col-lg-2" style="height: 5px">
+                            <input type="text" placeholder="数组" class="form-control" id="pubtime_xpath" style="margin-top: -5px" value="{{ pubtime_xpath }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">pub_reduce：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" placeholder="数组" class="form-control" id="pubtime_reduce" style="margin-top: -5px" value="{{ pubtime_reduce }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">time_fmt：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" class="form-control" id="pubtime_format" style="margin-top: -5px" value="{{ pubtime_format }}"/>
+                        </div>
+                    <!--tags-->
+                    <div class="col-lg-12 url-wrapper"></div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">tags_re：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" class="form-control" id="tags_re" style="margin-top: -5px" value="{{ tags_re }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">tags_xpath：</label>
+                        <div class="col-lg-2" style="height: 5px">
+                            <input type="text" placeholder="数组" class="form-control" id="tags_xpath" style="margin-top: -5px" value="{{ tags_xpath }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">tags_reduce：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" placeholder="数组" class="form-control" id="tags_reduce" style="margin-top: -5px" value="{{ tags_reduce }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">split：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" class="form-control" id="tags_split" style="margin-top: -5px" value="{{ tags_split }}"/>
+                        </div>
+                    <!--author-->
+                    <div class="col-lg-12 url-wrapper"></div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">auth_re：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" class="form-control" id="author_re" style="margin-top: -5px" value="{{ author_re }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">auth_xpath：</label>
+                        <div class="col-lg-2" style="height: 5px">
+                            <input type="text" placeholder="数组" class="form-control" id="author_xpath" style="margin-top: -5px" value="{{ author_xpath }}"/>
+                        </div>
+                    <label class="col-sm-1 control-label" style="text-align: right; margin-top:5px">auth_reduce：</label>
+                        <div class="col-lg-1" style="height: 5px">
+                            <input type="text" placeholder="数组" class="form-control" id="author_reduce" style="margin-top: -5px" value="{{ author_reduce }}"/>
+                        </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading" style="background-color: #31b0d5">
+                    clean字段配置
+                </div>
+                <div class="panel-body form-group" style="margin-bottom:0px;">
+                    <label class="col-sm-1" style="text-align: right; margin-top:10px">tit_lowest：</label>
+                        <div class="col-lg-1">
+                            <input type="number" class="form-control" id="title_lowest" value="{{ title_lowest }}"/>
+                        </div>
+                    <label class="col-sm-1" style="text-align: right; margin-top:10px">tit_is_num：</label>
+                        <select class="col-sm-1" id="title_is_num" style="margin-top: 5px">
+                            <option value="1">1</option>
+                            <option value="0">0</option>
+                        </select>
+                    <label class="col-sm-1" style="text-align: right; margin-top:10px">tit_is_alp：</label>
+                        <select class="col-sm-1" id="title_is_alphabet" style="margin-top: 5px">
+                            <option value="1">1</option>
+                            <option value="0">0</option>
+                        </select>
+                    <label class="col-sm-1" style="text-align: right; margin-top:10px">tit_del：</label>
+                        <div class="col-lg-1">
+                            <input type="text" placeholder="数组" class="form-control" id="title_del" value="{{ title_del }}"/>
+                        </div>
+                    <label class="col-sm-1" style="text-align: right; margin-top:10px">tit_string：</label>
+                        <div class="col-lg-1">
+                            <input type="text" placeholder="数组" class="form-control" id="title_string" value="{{ title_string }}"/>
+                        </div>
+                    <div class="col-lg-12 url-wrapper"></div>
+                    <label class="col-sm-1" style="text-align: right; margin-top:10px">cont_lowest：</label>
+                        <div class="col-lg-1">
+                            <input type="number" class="form-control" id="content_lowest_str" value="{{ content_lowest_str }}"/>
+                        </div>
+                    <label class="col-sm-1" style="text-align: right; margin-top:10px">lowest_pic：</label>
+                        <div class="col-lg-1">
+                            <input type="number" class="form-control" id="content_lowest_pic" value="{{ content_lowest_pic }}"/>
+                        </div>
+                    <label class="col-sm-1" style="text-align: right; margin-top:10px">highest_pic：</label>
+                        <div class="col-lg-1">
+                            <input type="number" class="form-control" id="content_highest_pic" value="{{ content_highest_pic }}"/>
+                        </div>
+                    <label class="col-sm-1" style="text-align: right; margin-top:10px">cont_del：</label>
+                        <div class="col-lg-1">
+                            <input type="text" placeholder="数组" class="form-control" id="content_del" value="{{ content_del }}"/>
+                        </div>
+                    <div class="col-lg-12 url-wrapper"></div>
+                    <label class="col-sm-1" style="text-align: right; margin-top:10px">qr_image：</label>
+                        <select class="col-sm-1" id="image_reduce_method">
+                            <option value="last">last</option>
+                            <option value="first">first</option>
+                            <option value="all_qrcode">all_qrcode</option>
+                            <option value="last_qrcode">last_qrcode</option>
+                        </select>
+                    <label class="col-sm-1" style="text-align: right; margin-top:10px">cont_string：</label>
+                        <div class="col-lg-1">
+                            <input type="text" placeholder="数组" class="form-control" id="content_string" value="{{ content_string }}"/>
+                        </div>
+                    <label class="col-sm-1" style="text-align: right; margin-top:10px">string_node：</label>
+                        <div class="col-lg-1">
+                            <input type="text" placeholder="数组" class="form-control" id="content_string_node" value="{{ content_string_node }}"/>
+                        </div>
+                </div>
+            </div>
+                <!--<input class="col-sm-6" value="{{ submit_message }}" id="submit_message"/>-->
+            <div class="panel panel-default">
+                <div class="panel-heading" style="background-color: #31b0d5">
+                    测试和提交
+                </div>
+                <div class="panel-body form-group" style="margin-bottom:0px;">
+                    <div class="col-sm-12">
+                        <button class="btn btn-primary" id="preview_btn" value="预览配置">预览配置</button>&emsp;&emsp;
+                        <button class="btn btn-primary" id="test_btn" value="测试">测试</button>&emsp;&emsp;
+                        <button class="btn btn-primary" id="submit_btn" value="提交">提交</button>
+                    </div>
+                    <div class="col-lg-12 url-wrapper"></div>
+                    <textarea readonly="readonly" rows="40" cols="50" id="xpath_data">
+                        {{ xpath_data }}
+                    </textarea>
+                    <textarea readonly="readonly" rows="40" cols="95" id="crawl_data">
+                        {{ crawl_data }}
+                    </textarea>
+                    <!--<object type="text/json" width="49%;" align="left" height="800px" data="login.html">-->
+                        <!--<param id="xpath_data" name="xpath_data" value="{{ xpath_data }}">-->
+                    <!--</object>-->
+                    <!--<object type="text/json" width="49%;" align="right" height="800px" data="https://www.baidu.com"></object>-->
+                </div>
+            </div>
+    </div>
+</div>
+        <script>
+            $(document).ready(
+                $('#test_btn').click(function () {
+                    $.ajax({
+                        url:'{% url 'config_opt'%}',
+                        type:'POST',
+                        dataType:'text',
+                        data:{
+                            csrfmiddlewaretoken :$("input[name='csrfmiddlewaretoken']").val(),
+                            opt_name:$('#test_btn').val(),
+                            site_name:$('#site_name').val(),
+                            channel:$('#channel').val(),
+                            start_url : $('#start_url').val(),
+                            timestamp : $('#timestamp').val(),
+                            start_web_type : $('#start_web_type').val(),
+                            start_url_req_type : $('#start_url_req_type').val(),
+                            start_headers : $('#start_headers').val(),
+                            urllist_re : $('#urllist_re').val(),
+                            urllist_add : $('#urllist_add').val(),
+                            urllist_xpath : $('#urllist_xpath').val(),
+                            urllist_reduce : $('#urllist_reduce').val(),
+                            imglist_xpath : $('#imglist_xpath').val(),
+                            imglist_url_add : $('#imglist_url_add').val(),
+                            imglist_url_reduce : $('#imglist_url_reduce').val(),
+                            imglist_img_add : $('#imglist_img_add').val(),
+                            imglist_img_reduce : $('#imglist_img_reduce').val(),
+                            img_sign : $('#img_sign').val(),
+                            url_sign : $('#url_sign').val(),
+                            detail_web_type : $('#detail_web_type').val(),
+                            detail_url_req_type : $('#detail_url_req_type').val(),
+                            detail_url_headers : $('#detail_url_headers').val(),
+                            title_re : $('#title_re').val(),
+                            title_xpath : $('#title_xpath').val(),
+                            title_add : $('#title_add').val(),
+                            title_reduce : $('#title_reduce').val(),
+                            content_re : $('#content_re').val(),
+                            content_xpath : $('#content_xpath').val(),
+                            reduce_node : $('#reduce_node').val(),
+                            cont_reduce : $('#cont_reduce').val(),
+                            img_suffix : $('#img_suffix').val(),
+                            img_add : $('#img_add').val(),
+                            img_reduce : $('#img_reduce').val(),
+                            img_time_format : $('#img_time_format').val(),
+                            next_page_sign : $('#next_page_sign').val(),
+                            next_page_re : $('#next_page_re').val(),
+                            next_page_xpath : $('#next_page_xpath').val(),
+                            next_page_reduce : $('#next_page_reduce').val(),
+                            next_page_format : $('#next_page_format').val(),
+                            pubtime_re : $('#pubtime_re').val(),
+                            pubtime_xpath : $('#pubtime_xpath').val(),
+                            pubtime_reduce : $('#pubtime_reduce').val(),
+                            pubtime_format : $('#pubtime_format').val(),
+                            tags_re : $('#tags_re').val(),
+                            tags_xpath : $('#tags_xpath').val(),
+                            tags_reduce : $('#tags_reduce').val(),
+                            tags_split : $('#tags_split').val(),
+                            author_re : $('#author_re').val(),
+                            author_xpath : $('#author_xpath').val(),
+                            author_reduce : $('#author_reduce').val(),
+                            categories : $('#categories').val(),
+                            title_lowest : $('#title_lowest').val(),
+                            title_is_num : $('#').val(),
+                            title_is_alphabet : $('#title_is_alphabet').val(),
+                            title_del : $('#title_del').val(),
+                            title_string : $('#title_string').val(),
+                            content_lowest_str : $('#content_lowest_str').val(),
+                            content_lowest_pic : $('#content_lowest_pic').val(),
+                            content_highest_pic : $('#content_highest_pic').val(),
+                            content_del : $('#content_del').val(),
+                            image_reduce_method : $('#image_reduce_method').val(),
+                            content_string : $('#content_string').val(),
+                            content_string_node : $('#content_string_node').val()
+                        },
+                        success:function (data) {
+                            console.log('测试')
+                            $('body').html(data)
+                            var json = $('#xpath_data').html()
+                            json =  JSON.stringify(JSON.parse(json), null , 2)
+                            $('#xpath_data').html(json)
+                            var json = $('#crawl_data').html()
+                            json =  JSON.stringify(JSON.parse(json), null , 2)
+                            $('#crawl_data').html(json)
+                        }
+                    })
+                })
+            )
+            $(document).ready(
+                $('#preview_btn').click(function () {
+                    $.ajax({
+                        url:'{% url 'config_opt'%}',
+                        type:'POST',
+                        dataType:'text',
+                        data: {
+                            csrfmiddlewaretoken :$("input[name='csrfmiddlewaretoken']").val(),
+                            opt_name:$('#preview_btn').val(),
+                            site_name:$('#site_name').val(),
+                            channel:$('#channel').val(),
+                            start_url : $('#start_url').val(),
+                            timestamp : $('#timestamp').val(),
+                            start_web_type : $('#start_web_type').val(),
+                            start_url_req_type : $('#start_url_req_type').val(),
+                            start_headers : $('#start_headers').val(),
+                            urllist_re : $('#urllist_re').val(),
+                            urllist_add : $('#urllist_add').val(),
+                            urllist_xpath : $('#urllist_xpath').val(),
+                            urllist_reduce : $('#urllist_reduce').val(),
+                            imglist_xpath : $('#imglist_xpath').val(),
+                            imglist_url_add : $('#imglist_url_add').val(),
+                            imglist_url_reduce : $('#imglist_url_reduce').val(),
+                            imglist_img_add : $('#imglist_img_add').val(),
+                            imglist_img_reduce : $('#imglist_img_reduce').val(),
+                            img_sign : $('#img_sign').val(),
+                            url_sign : $('#url_sign').val(),
+                            detail_web_type : $('#detail_web_type').val(),
+                            detail_url_req_type : $('#detail_url_req_type').val(),
+                            detail_url_headers : $('#detail_url_headers').val(),
+                            title_re : $('#title_re').val(),
+                            title_xpath : $('#title_xpath').val(),
+                            title_add : $('#title_add').val(),
+                            title_reduce : $('#title_reduce').val(),
+                            content_re : $('#content_re').val(),
+                            content_xpath : $('#content_xpath').val(),
+                            reduce_node : $('#reduce_node').val(),
+                            cont_reduce : $('#cont_reduce').val(),
+                            img_suffix : $('#img_suffix').val(),
+                            img_add : $('#img_add').val(),
+                            img_reduce : $('#img_reduce').val(),
+                            img_time_format : $('#img_time_format').val(),
+                            next_page_sign : $('#next_page_sign').val(),
+                            next_page_re : $('#next_page_re').val(),
+                            next_page_xpath : $('#next_page_xpath').val(),
+                            next_page_reduce : $('#next_page_reduce').val(),
+                            next_page_format : $('#next_page_format').val(),
+                            pubtime_re : $('#pubtime_re').val(),
+                            pubtime_xpath : $('#pubtime_xpath').val(),
+                            pubtime_reduce : $('#pubtime_reduce').val(),
+                            pubtime_format : $('#pubtime_format').val(),
+                            tags_re : $('#tags_re').val(),
+                            tags_xpath : $('#tags_xpath').val(),
+                            tags_reduce : $('#tags_reduce').val(),
+                            tags_split : $('#tags_split').val(),
+                            author_re : $('#author_re').val(),
+                            author_xpath : $('#author_xpath').val(),
+                            author_reduce : $('#author_reduce').val(),
+                            categories : $('#categories').val(),
+                            title_lowest : $('#title_lowest').val(),
+                            title_is_num : $('#').val(),
+                            title_is_alphabet : $('#title_is_alphabet').val(),
+                            title_del : $('#title_del').val(),
+                            title_string : $('#title_string').val(),
+                            content_lowest_str : $('#content_lowest_str').val(),
+                            content_lowest_pic : $('#content_lowest_pic').val(),
+                            content_highest_pic : $('#content_highest_pic').val(),
+                            content_del : $('#content_del').val(),
+                            image_reduce_method : $('#image_reduce_method').val(),
+                            content_string : $('#content_string').val(),
+                            content_string_node : $('#content_string_node').val()
+                        },
+                        success:function (data) {
+                            console.log('预览配置')
+                            $('body').html(data)
+                            var json = $('#xpath_data').html()
+                            json =  JSON.stringify(JSON.parse(json), null , 2)
+                            $('#xpath_data').html(json)
+                        }
+                    })
+                })
+            )
+            $(document).ready(
+                $('#submit_btn').click(function () {
+                    $.ajax({
+                        url:'{% url 'config_opt'%}',
+                        type:'POST',
+                        dataType:'text',
+                        data: {
+                            csrfmiddlewaretoken :$("input[name='csrfmiddlewaretoken']").val(),
+                            opt_name:$('#submit_btn').val(),
+                            site_name:$('#site_name').val(),
+                            channel:$('#channel').val(),
+                            start_url : $('#start_url').val(),
+                            timestamp : $('#timestamp').val(),
+                            start_web_type : $('#start_web_type').val(),
+                            start_url_req_type : $('#start_url_req_type').val(),
+                            start_headers : $('#start_headers').val(),
+                            urllist_re : $('#urllist_re').val(),
+                            urllist_add : $('#urllist_add').val(),
+                            urllist_xpath : $('#urllist_xpath').val(),
+                            urllist_reduce : $('#urllist_reduce').val(),
+                            imglist_xpath : $('#imglist_xpath').val(),
+                            imglist_url_add : $('#imglist_url_add').val(),
+                            imglist_url_reduce : $('#imglist_url_reduce').val(),
+                            imglist_img_add : $('#imglist_img_add').val(),
+                            imglist_img_reduce : $('#imglist_img_reduce').val(),
+                            img_sign : $('#img_sign').val(),
+                            url_sign : $('#url_sign').val(),
+                            detail_web_type : $('#detail_web_type').val(),
+                            detail_url_req_type : $('#detail_url_req_type').val(),
+                            detail_url_headers : $('#detail_url_headers').val(),
+                            title_re : $('#title_re').val(),
+                            title_xpath : $('#title_xpath').val(),
+                            title_add : $('#title_add').val(),
+                            title_reduce : $('#title_reduce').val(),
+                            content_re : $('#content_re').val(),
+                            content_xpath : $('#content_xpath').val(),
+                            reduce_node : $('#reduce_node').val(),
+                            cont_reduce : $('#cont_reduce').val(),
+                            img_suffix : $('#img_suffix').val(),
+                            img_add : $('#img_add').val(),
+                            img_reduce : $('#img_reduce').val(),
+                            img_time_format : $('#img_time_format').val(),
+                            next_page_sign : $('#next_page_sign').val(),
+                            next_page_re : $('#next_page_re').val(),
+                            next_page_xpath : $('#next_page_xpath').val(),
+                            next_page_reduce : $('#next_page_reduce').val(),
+                            next_page_format : $('#next_page_format').val(),
+                            pubtime_re : $('#pubtime_re').val(),
+                            pubtime_xpath : $('#pubtime_xpath').val(),
+                            pubtime_reduce : $('#pubtime_reduce').val(),
+                            pubtime_format : $('#pubtime_format').val(),
+                            tags_re : $('#tags_re').val(),
+                            tags_xpath : $('#tags_xpath').val(),
+                            tags_reduce : $('#tags_reduce').val(),
+                            tags_split : $('#tags_split').val(),
+                            author_re : $('#author_re').val(),
+                            author_xpath : $('#author_xpath').val(),
+                            author_reduce : $('#author_reduce').val(),
+                            categories : $('#categories').val(),
+                            title_lowest : $('#title_lowest').val(),
+                            title_is_num : $('#').val(),
+                            title_is_alphabet : $('#title_is_alphabet').val(),
+                            title_del : $('#title_del').val(),
+                            title_string : $('#title_string').val(),
+                            content_lowest_str : $('#content_lowest_str').val(),
+                            content_lowest_pic : $('#content_lowest_pic').val(),
+                            content_highest_pic : $('#content_highest_pic').val(),
+                            content_del : $('#content_del').val(),
+                            image_reduce_method : $('#image_reduce_method').val(),
+                            content_string : $('#content_string').val(),
+                            content_string_node : $('#content_string_node').val()
+                        },
+                        success:function (result) {
+                            console.log('提交')
+                            alert(result)
+                        }
+                    })
+                })
+            )
+        </script>
+</body>
+</html>

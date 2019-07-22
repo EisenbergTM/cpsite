@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+{% load staticfiles %}
+<link href="{%static "css/bootstrap/bootstrap.min.css" %}" rel="stylesheet" type="text/css" >
+<link href="{%static "css/bootstrap/bootstrap-table.css" %}" rel="stylesheet" type="text/css" >
+<link href="{%static "css/adstyle.css" %}" rel="stylesheet" type="text/css" />
+
+{% include "header.html" %}
+{% include 'menu.html' %}
+{% csrf_token %}
+<body>
+    <!--<div id="container_image_site_name" style="width: 80%; height: 400px; margin-top: 10%;left: 20%"></div>-->
+    <!--<div id="container_qiyu_top_ten" style="width: 80%; height: 400px; margin-top: 10%;left: 20%"></div>-->
+    <!--<div id="container_qiyu_top_ten" style="width:calc(100% - 220px);margin-left: 220px; height: 400px; margin-top: 10%;"></div>-->
+    <div id="container_qiyu_top_ten" style="width: 80%; height: 400px; margin-top: 10%;margin-left: 20%"></div>
+    <div id="container_qiyu_image" style="width: 80%; height: 400px; margin-top: 10%;margin-left: 20%"></div>
+    <div id="container_qiyu_category" style="width: 80%; height: 400px; margin-top: 10%;margin-left: 20%"></div>
+    <script src="{%static 'js/highcharts_article.js' %}"></script>
+    <script src="{%static 'js/drilldown.js' %}"></script>
+    <!--<script src="https://img.highcharts.com.cn/highcharts/highcharts.js"></script>-->
+    <!--<script src="https://img.highcharts.com.cn/highcharts/modules/drilldown.js"></script>-->
+    <!--<input id="categories_image"  value="{{ categories_image }}" style="display: none">-->
+    <input id="data_image" value="{{ data_image }}" style="display: none">
+    <input id="series_image" value="{{ series_image }}" style="display: none">
+    <!--<input id="categories_qiyu_top_ten"  value="{{ categories_qiyu_top_ten }}" style="display: none">-->
+    <input id="data_qiyu_top_ten" value="{{ data_qiyu_top_ten }}" style="display: none">
+    <input id="series_qiyu_top_ten" value="{{ series_qiyu_top_ten }}" style="display: none">
+
+    <input id="data_qiyu_category" value="{{ data_qiyu_category }}" style="display: none">
+    <input id="series_qiyu_category" value="{{ series_qiyu_category }}" style="display: none">
+<script>
+var js_image_series = JSON.parse($('#series_image').val())
+var js_image_data = JSON.parse($('#data_image').val())
+Highcharts.chart('container_qiyu_image', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: '昨天qiyu图集前10网站抓取量'
+    },
+    subtitle: {
+        // text: '点击可查看具体的版本数据，数据来源: <a href="https://netmarketshare.com">netmarketshare.com</a>.'
+        text:'点击网站可查看近7天数据'
+    },
+    xAxis: {
+        type: 'category'
+    },
+    yAxis: {
+        title: {
+            text: '入库量（Num）'
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    plotOptions: {
+        series: {
+            borderWidth: 0,
+            dataLabels: {
+                enabled: true,
+                // format: '{point.y:.1f}%'
+                format:'{point.y:.0f}'
+            }
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+        // pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.0f}</b> 条<br/>'
+    },
+    // series:[],
+    series: [{
+        name: '网站名称',
+        colorByPoint: true,
+        data:js_image_data
+    }],
+    drilldown: {
+        series:js_image_series
+    }
+});
+
+
+
+var js_series = JSON.parse($('#series_qiyu_top_ten').val())
+var js_data = JSON.parse($('#data_qiyu_top_ten').val())
+Highcharts.chart('container_qiyu_top_ten', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: '昨天qiyu图文前10网站抓取量'
+    },
+    subtitle: {
+        // text: '点击可查看具体的版本数据，数据来源: <a href="https://netmarketshare.com">netmarketshare.com</a>.'
+        text:'点击网站可查看近7天数据'
+    },
+    xAxis: {
+        type: 'category'
+    },
+    yAxis: {
+        title: {
+            text: '入库量（Num）'
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    plotOptions: {
+        series: {
+            borderWidth: 0,
+            dataLabels: {
+                enabled: true,
+                // format: '{point.y:.1f}%'
+                format:'{point.y:.0f}'
+            }
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+        // pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.0f}</b> 条<br/>'
+    },
+    // series:[],
+    series: [{
+        name: '网站名称',
+        colorByPoint: true,
+        data:js_data
+    }],
+    drilldown: {
+        series:js_series
+    }
+});
+
+var js_category_series = JSON.parse($('#series_qiyu_category').val())
+var js_category_data = JSON.parse($('#data_qiyu_category').val())
+Highcharts.chart('container_qiyu_category', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: '昨天qiyu按一级分类抓取量'
+    },
+    subtitle: {
+        // text: '点击可查看具体的版本数据，数据来源: <a href="https://netmarketshare.com">netmarketshare.com</a>.'
+        text:'点击分类可查看近七天数据'
+    },
+    xAxis: {
+        type: 'category'
+    },
+    yAxis: {
+        title: {
+            text: '入库量（Num）'
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    plotOptions: {
+        series: {
+            borderWidth: 0,
+            dataLabels: {
+                enabled: true,
+                // format: '{point.y:.1f}%'
+                format:'{point.y:.0f}'
+            }
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+        // pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.0f}</b> 条<br/>'
+    },
+    // series:[],
+    series: [{
+        name: '分类',
+        colorByPoint: true,
+        data:js_category_data
+    }],
+    drilldown: {
+        series:js_category_series
+    }
+});
+
+</script>
+
+</body>
+</html>

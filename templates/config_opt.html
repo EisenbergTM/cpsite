@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+{% load staticfiles %}
+<link href="{%static "css/bootstrap/bootstrap.min.css" %}" rel="stylesheet" type="text/css" >
+<link href="{%static "css/bootstrap/bootstrap-table.css" %}" rel="stylesheet" type="text/css" >
+<link href="{%static "css/adstyle.css" %}" rel="stylesheet" type="text/css" />
+
+{% include "header.html" %}
+{% include 'menu.html' %}
+{% csrf_token %}
+<body>
+<div class="home">
+    <div class="home_right">
+        <div class="homepage">
+            <div class="pagename" align="center">网站信息</div>
+        </div>
+        <div class="user_hr">
+        </div>
+        <div class="user_list">
+            <div class="user_list_ls">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        配置信息
+                    </div>
+                   <div class="panel-body form-group" style="margin-bottom:0px;">
+                        <label class="col-sm-1 control-label" style="text-align: right; margin-top:10px">site_name：</label>
+                        <div class="col-sm-2">
+                            <input type="text" placeholder="必需" class="form-control" name="site_name" id="search_name" value="{{ site_name }}"/>
+                            </form>
+                        </div>
+                        <label class="col-sm-1 control-label" style="text-align: right; margin-top:10px">channel：</label>
+                        <div class="col-sm-2">
+                            <input type="text" placeholder="必需" class="form-control" name="channel" id="search_channel" value="{{ channel }}"/>
+                        </div>
+                        <div class="col-lg-3">
+                            <button class="btn btn-primary" id="preview_btn" value="预览"> 预览 </button>&emsp;&emsp;
+                            <button class="btn btn-primary" id="update_btn" value="更新"> 更新 </button>&emsp;&emsp;
+                            <button class="btn btn-primary" id="addnew_btn" value="新增"> 新增 </button>
+                        </div>
+            </div>
+        </div>
+        <div class="code">
+        <!--<div class="panel-body form-group" style="margin-bottom:0px;">-->
+            <pre align="left" id="preve">{{ config }}</pre>
+        </div>
+    </div>
+</div>
+        <script>
+            $(document).ready(
+                $('#preview_btn').click(function () {
+                    $.ajax({
+                        url:'{% url 'config_opt'%}',
+                        type:'POST',
+                        dataType:'text',
+                        data:{
+                            csrfmiddlewaretoken :$("input[name='csrfmiddlewaretoken']").val(),
+                            opt_name:$('#preview_btn').val(),
+                            site_name:$('#search_name').val(),
+                            channel:$('#search_channel').val()
+                        },
+                        success:function (data) {
+                            $('body').html(data)
+                            var json = $('#preve').html()
+                            json =  JSON.stringify(JSON.parse(json), null , 2)
+                            $('#preve').html(json)
+                            // $.parser.parse("#preve");
+                        }
+                    })
+                })
+            )
+            $(document).ready(
+                $('#update_btn').click(function () {
+                    $.ajax({
+                        url:'{% url 'config_opt'%}',
+                        type:'POST',
+                        dataType:'text',
+                        data:{
+                            csrfmiddlewaretoken :$("input[name='csrfmiddlewaretoken']").val(),
+                            opt_name:$('#update_btn').val(),
+                            site_name:$('#search_name').val(),
+                            channel:$('#search_channel').val()
+                        },
+                        success:function (data) {
+                            $('body').html(data)
+                        }
+                    })
+                    }
+                )
+            )
+            $(document).ready(
+                $('#addnew_btn').click(function () {
+                    $.ajax({
+                        url:'{% url 'config_opt'%}',
+                        type:'POST',
+                        dataType:'text',
+                        data:{
+                            csrfmiddlewaretoken :$("input[name='csrfmiddlewaretoken']").val(),
+                            opt_name:$('#addnew_btn').val(),
+                            site_name:$('#search_name').val(),
+                            channel:$('#search_channel').val()
+                        },
+                        // success:function () {
+                        //     console.log('addnew',$('#search_name').val(),$('#search_channel').val())
+                        success:function (data) {
+                            $('body').html(data)
+                        }
+                    })
+                    }
+                )
+            )
+        </script>
+</body>
+</html>

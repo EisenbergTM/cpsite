@@ -1,0 +1,81 @@
+{   "name":"Grab_Test_Config",
+    "start_url":{
+                 "version":"3.0",  //版本号
+                 "url":"http://house.123.com.cn/jiaju/",    //网站链接
+                 "headers": {
+                            },    //网站请求添加header头，默认为空
+                 "body":"",
+                 "urllist":{
+                              "re":"",    //网站正则匹配规则（下同）
+                              "xpath":["//div[@class='mixed-txt']/h6/a/@href"],    //网站xpath匹配规则（下同）
+                              "url_add_str": "http:",    //解析后的详情页网站添加字符（可在任意位置添加）
+                              "url_reduce_str": [],    //解析后的详情页网站去除字符（先去除后添加）
+                              "img_add_str":"",
+                              "img_reduce_str": [],
+                              "img_sign":"",
+                              "url_sign":"house.123.com.cn"    //详情页标志，并且封面图中没有（过滤其他杂乱链接）
+                       }
+                 },
+    "detail_url":{
+                 "headers": {
+                            },
+                 "body":"",
+                 "title":{
+                              "re":"",
+                              "xpath":["//div[@class='channel-main-left fl']/h1/text()"],
+                              "reduce_str": []
+                         },
+                 "content":{
+                              "re":"",
+                              "xpath":["//div[@id='gb_article_body']"],
+                              "reduce_node":[],    //内容中不需要节点标签，如果带有标志，去掉该标签所有内容
+                              "reduce_str": [],
+                              "image":{
+                                      "suffix":"src",    //文章图片的取值键，一般是src
+                                      "add_str":"https:",
+                                      "reduce_str": [],
+                                      "time_format":""    //如果抓取图片需要加日期时间，配置时间格式（例：/%Y-%m/%d）
+                                      }
+                           },
+                 "next_page":{
+                              "sign":"",    //需要翻页文章的标志位，有才翻页
+                              "re":"",    //文章最后一页的抓取规则（re方式解析）
+                              "xpath": [],    //文章最后一页的抓取规则（xpath方式解析）
+                              "reduce_str": [],    //抓取到的最后一页信息的缩减字符
+                              "next_page_format":"" //第n页网址的格式（例：http:123.com/a.html>>http:123.com/a_2.html,规则为.html|_{}.html）
+                             },
+                 "pubtime":{
+                              "re":"",
+                              "xpath": ["//p[@class='fl']/span/text()"],
+                              "add_str": "",
+                              "reduce_str": [],
+                              "time_format":""
+                           },
+                 "tags":{
+                              "re":"",
+                              "xpath":[],
+                              "reduce_str": [],
+                              "split_str":""
+                        },
+                 "author":{
+                              "re":"",
+                              "xpath":[],
+                              "reduce_str": []
+                          },
+                 "filter_id":{
+                              "re":"",
+                              "xpath":[],
+                              "reduce_str": []
+                               },
+                 "site_name":"云掌财经智能家居",    //抓取网站中文名称
+                 "channel":"房产",    //抓取网站频道
+                 "is_hot":"0",    //抓取源是否是热点源（0-否，1-是）
+                 "news_type":"1",    //抓取网站类型（1-图文，3-视频，5-音频，9-图集，混合网站暂不列入其中）
+                 "is_pass_directly":"0",    //抓取信息是否跳过去重（0-否，1-是
+                 "is_used_src_resource":"0",
+                 "redirect_type":"0",
+                 "from_source":"",
+                 "categories":[],
+                 "url_filter":0  //是否经由url去重 0-否，1-是
+                 }
+}

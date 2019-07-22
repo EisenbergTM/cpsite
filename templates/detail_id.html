@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+{% load staticfiles %}
+
+<link href="{%static "css/bootstrap/bootstrap.min.css" %}" rel="stylesheet" type="text/css" >
+<link href="{%static "css/bootstrap/bootstrap-table.css" %}" rel="stylesheet" type="text/css" >
+<link href="{%static "css/adstyle.css" %}" rel="stylesheet" type="text/css" />
+
+<!--<script LANGUAGE="JavaScript">window.open('detail_id.html')</script>-->
+{% include "header.html" %}
+{% include 'menu.html' %}
+{% csrf_token %}
+<body>
+<div class="home">
+    <div class="home_right">
+         <div class="homepage">
+             <div class="pagename">
+                <button class="btn btn-primary" id="return" style="float: left;margin-top: 10px" onclick="javascript:history.back(-1);">返回查询列表</button>
+             </div>
+         </div>
+         <div class="user_list">
+            <div class="user_list_ls">
+                <div class="panel panel-default">
+                    <div class="panel-heading">详情页面</div>
+                    <!--<div class="panel-body"></div>-->
+                </div>
+                <div class="page_detail" id="format" style="height: 70%;width: 80%;position: fixed">
+                    <div class="frame1" style="display: inline-block;align-items: left;width: 49%;height: 100%;overflow-x: scroll">
+                        <iframe src="{{ org_url }}" width="100%" height="100%" frameborder="0" scrolling="yes" id="frame"></iframe>
+                    </div>
+                    <div class="frame2" style="display: inline-block;align-items: right;width: 49%;height: 100%;overflow-y: scroll;overflow-x: scroll">
+                        <div class="page-header">
+                            <h4 id="title">{{ title }}</h4>
+                            <p id="site_name" align="left">文章来源：{{ site_name }}</p>
+                            <p id="pubtime" align="left">发布时间：{{ pubtime }}</p>
+                        </div>
+                        <div class="panel-body">
+                            <div id="content" align="left" style="width: 500px">
+                                {% for i in content %}
+                                {% if i.type == 'text' %}
+                                <p>{{ i.data }}</p>
+                                {% endif %}
+                                {% if i.type == 'img' %}
+                                <p><img src="{{ i.data }}"></p>
+                                {% endif %}
+                                {% if i.type == 'video' %}
+                                <p><video src="{{ i.data }}" autoplay="true" controls="controls"></video></p>
+                                {% endif %}
+                                {% if i.type == 'audio' %}
+                                <p><audio src="{{ i.data }}" autoplay="true" controls="controls"></audio></p>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<!---->

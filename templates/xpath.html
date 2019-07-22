@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+{% load staticfiles %}
+<link href="{%static "css/bootstrap/bootstrap.min.css" %}" rel="stylesheet" type="text/css" >
+<link href="{%static "css/bootstrap/bootstrap-table.css" %}" rel="stylesheet" type="text/css" >
+<link href="{%static "css/adstyle.css" %}" rel="stylesheet" type="text/css" />
+
+{% include "header.html" %}
+{% include 'menu.html' %}
+{% csrf_token %}
+<body>
+<div class="home">
+    <div class="home_right">
+        <div class="homepage">
+            <li><font size="5">网站配置信息</font></li>
+        </div>
+        <div class="user_hr">
+        </div>
+        <div class="user_list">
+            <div class="user_list_ls">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style=""><font size="3"> 配置文件为scrapy-redis抓取提供网站基本信息以及解析规则 </font></div>
+                </div>
+                <div class = "json">
+                    <span class="code">
+                        <pre align="left">{{ datalist }}</pre>
+                    </span>
+                </div>
+    </div>
+</div>
+</body>
+</html>

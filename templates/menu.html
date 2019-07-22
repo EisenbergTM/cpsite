@@ -1,0 +1,52 @@
+{% load staticfiles %}
+<meta charset="utf-8" />
+<!-- 通用样式 -->
+<link rel="stylesheet" type="text/css" href="{% static "css/public.css" %}">
+<!-- 动态菜单CSS -->
+<link rel="stylesheet" type="text/css" href="{% static "css/menu.css" %}">
+<!-- jquery引入 -->
+<script src="{% static "js/jquery.min.js" %}"></script>
+<!-- 动态菜单JS -->
+<script type="text/javascript" src="{% static "js/menu.js" %}"></script>
+<div class="middle">
+	<div class="leftMenu">
+		<div class="topMenu">
+			<img class="banshi" src="{% static "img/banshidating.png" %}"/>
+			<p class="menuTitle">爬虫管理平台</p>
+		</div>
+		<div class="menu_list">
+			<ul>
+				<li class="">
+					<p class="fuMenu"><a href="/index">网站首页</a></p>
+				</li>
+				<li class="">
+					<p class="fuMenu">网站配置信息管理</p>
+					<img class="xiala" src="{% static "img/xiala.png" %}" />
+					<div class="div1">
+                        <p class="zcd" id="zcd10"><a href="/config_format">配置文件格式</a></p>
+						<p class="zcd" id="zcd11"><a href="/config_opt">网站配置操作</a></p>
+					</div>
+				</li>
+				<li class="test">
+					<p class="fuMenu"><a href="/test_opt">测试</a></p>
+				</li>
+				<li class="chart">
+					<p class="fuMenu">抓取信息统计</p>
+					<img class="xiala" src="{% static "img/xiala.png" %}" />
+					<div class="div1">
+                        <p class="zcd" id="article"><a href="/chart/article">图文</a></p>
+						<p class="zcd" id="audio"><a href="/chart/audio">音频</a></p>
+						<p class="zcd" id="video"><a href="/chart/video">视频</a></p>
+						<p class="zcd" id="all"><a href="/chart/all">总量</a></p>
+					</div>
+				</li>
+				<li class="weixin">
+					<p class="fuMenu"><a href="/index_weixin">公众号和app</a></p>
+				</li>
+				<li class="weixin">
+					<p class="fuMenu"><a href="/index_majiahao">马甲号</a></p>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

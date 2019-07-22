@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+{% load staticfiles %}
+<link href="{%static "css/bootstrap/bootstrap.min.css" %}" rel="stylesheet" type="text/css" >
+<link href="{%static "css/bootstrap/bootstrap-table.css" %}" rel="stylesheet" type="text/css" >
+<link href="{%static "css/adstyle.css" %}" rel="stylesheet" type="text/css" />
+
+{% include "header.html" %}
+{% include 'menu.html' %}
+{% csrf_token %}
+<body>
+    <div id="container_audio_site_name" style="width: 80%; height: 400px; margin-top: 10%;margin-left: 20%"></div>
+    <script src="{%static 'js/jquery.min1.js' %}" style="text/javascript"></script>
+    <script src="{%static 'js/highcharts.js' %}"></script>
+    <!--<script src="{%static 'js/index.js' %}"></script>-->
+    <input id="categories"  value="{{ categories }}" style="display: none">
+    <input id="series" value="{{ series }}" style="display: none">
+<script>
+    console.log($('#series').val())
+    var categories = $('#categories').val().split('\', \'')
+    var series = JSON.parse(
+        $('#series').val()
+    )
+    // console.log(typeof $('#categories').val()),
+    // console.log(typeof $('#series').val())
+    console.log(categories)
+    console.log(series)
+$(function () {
+  $('#container_audio_site_name').highcharts({
+    title: {
+      text: 'qiyu音频按网站名称日抓取量',
+      x: -20 //center
+    },
+    colors: ['blue', 'red','black','blue','green','orange','yellow','brown','purple','gray'],
+    plotOptions: {
+      line: {
+        lineWidth: 2
+      },
+      tooltip: {
+        hideDelay: 100
+      }
+    },
+    subtitle: {
+      text: '',
+      x: -20
+    },
+    xAxis: {
+        categories:categories
+    },
+    yAxis: {
+      title: {
+        text: 'Num'
+      },
+      plotLines: [{
+        value: 0,
+        width: 1
+      }]
+    },
+    tooltip: {
+      valueSuffix: ' 条',
+      crosshairs: true,
+      shared: true
+    },
+    legend: {
+      layout: 'vertical',
+      align: 'right',
+      verticalAlign: 'middle',
+      borderWidth: 0
+    },
+    series:series
+  });
+});
+</script>
+
+</body>
+</html>

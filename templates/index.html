@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+{% load staticfiles %}
+<link href="{%static "css/bootstrap/bootstrap.min.css" %}" rel="stylesheet" type="text/css" >
+<link href="{%static "css/bootstrap/bootstrap-table.css" %}" rel="stylesheet" type="text/css" >
+<link href="{%static "css/adstyle.css" %}" rel="stylesheet" type="text/css" />
+
+{% include "header.html" %}
+{% include 'menu.html' %}
+{% csrf_token %}
+<body>
+<div class="home">
+    <div class="home_right">
+        <div class="homepage">
+            <div class="pagename"><p>网站频道配置信息列表</p></div>
+            <!--<div class="dangqianweizhi"><p>首页</p></div>-->
+        </div>
+        <div class="user_hr">
+        </div>
+        <div class="user_list">
+            <div class="user_list_ls">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        查询条件
+                    </div>
+                   <div class="panel-body form-group" style="margin-bottom:0px;">
+                        <label class="col-sm-1 control-label" style="text-align: right; margin-top:10px;white-space: nowrap">网站名称：</label>
+                        <div class="col-sm-2">
+                            <!--<input type="text" class="form-control" name="Name" id="search_name"/>-->
+                            <input type="text" class="form-control" name="Name" id="search_name"/>
+                        </div>
+                        <label class="col-sm-1 control-label" style="text-align: right; margin-top:10px">频道：</label>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control" name="Name" id="search_channel"/>
+                        </div>
+                        <div class="col-sm-1 col-sm-offset-1">
+                            <button class="btn btn-primary" id="search_btn">查询</button>
+                        </div>
+                        <div class="col-sm-1 col-sm-offset-1">
+                            <button class="btn btn-primary" id="search_offline_btn"  value="1">未上线列表</button>
+                        </div>
+                        <div class="col-sm-1 col-sm-offset-1">
+                            <button class="btn btn-primary" id="search_stoped_btn" value="0">停抓列表</button>
+                        </div>
+                     </div>
+                </div>
+
+                <table class="table table-hover" id="table"></table>
+                <script src="{%static "js/bootstrap/jquery.min.js" %}"></script>
+                <script src="{%static "js/bootstrap/bootstrap.min.js" %}"></script>
+                <script src="{%static "js/bootstrap/bootstrap-table.js" %}"></script>
+                <script src="{%static "js/bootstrap/bootstrap-table-editable.js" %}"></script>
+                <script src="{%static "js/bootstrap/bootstrap-table-zh-CN.js" %}"></script>
+                <script type="text/javascript">
+                    function initTable() {
+                        $('#table').bootstrapTable({
+                            method: "post",  //使用post请求到服务器获取数据
+                            contentType: "application/x-www-form-urlencoded",//必须要有！！！！
+                            dataType: "json",
+                            cache: false,
+                            url:'{% url 'site_channel_list' %}',
+                            toolbar: '#mytab',//指定工具栏
+                            striped: true,  //表格显示条纹
+                            dataField: "rows",
+                            pagination: true, //启动分页
+                            pageSize: 10,  //每页显示的记录数
+                            pageNumber:1, //当前第几页
+                            pageList: [5, 10, 15, 20, 25],  //记录数可选列表
+                            // search: true,  //是否启用查询#}
+                            // showColumns: true,  //显示下拉框勾选要显示的列#}
+                            // showRefresh: true,  //显示刷新按钮#}
+                            sidePagination: "server", //表示服务端请求
+                            //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
+                            //设置为limit可以获取limit, offset, search, sort, order
+                            queryParamsType : "undefined",
+                            clickToSelect: true,//是否启用点击选中行
+                            toolbarAlign:'left',//工具栏对齐方式
+                            buttonsAlign:'left',//按钮对齐方式
+                            columns:[
+                                {
+                                    title:'site_name',
+                                    field:'site_name',
+                                    align:'center',
+                                    valign:'middle',
+                                    sortable:false
+                                },
+                                {
+                                    title:'channel',
+                                    field:'channel',
+                                    align:'center',
+                                    valign:'middle',
+                                    sortable:false
+                                },
+                                {
+                                    title:'URL',
+                                    field:'URL',
+                                    align:'center',
+                                    valign:'middle',
+                                    sortable:false
+                                },
+                                {
+                                    title:'抓取频率(s)',
+                                    field:'rpush_frequence',
+                                    align:'center',
+                                    valign:'middle',
+                                    sortable:false
+                                },
+                                {
+                                    title:'是否停抓(1-0)',
+                                    field:'is_stop',
+                                    align:'center',
+                                    valign:'middle',
+                                    sortable:false
+                                },
+                                {
+                                    title:'测试状态',
+                                    field:'test_status',
+                                    align:'center',
+                                    valign:'middle',
+                                    sortable:false
+                                },
+                                {
+                                    title:'操作',
+                                    field:'id',
+                                    align:'center',
+                                    sortable:false,
+                                    // 列数据格式化
+                                    // formatter:operateFormatter
+                                    formatter:function(value,row){
+                                        console.log(row)
+                                        // {% csrf_token %}
+                                        var e1 = '<a href="#" mce_href="#" onclick=\'do_line_option("上线","' + row.URL +'","' + row.site_name + '","' + row.channel + '")\'> 上线 </a>';
+                                        var e2 = '<a href="#" mce_href="#" onclick=\'do_line_option("下线","' + row.URL + '","' + row.site_name + '","' + row.channel + '")\'> 下线 </a>';
+                                        var e3 = '<a href="#" mce_href="#" onclick=\'do_line_option("停抓","' + row.URL + '","' + row.site_name + '","' + row.channel + '")\'> 停抓 </a>';
+                                        var e4 = '<a href="#" mce_href="#" onclick=\'do_line_option("启用","' + row.URL + '","' + row.site_name + '","' + row.channel + '")\'> 启用 </a>';
+                                        return e1+e2+e3+e4;
+                                        // return e1;
+                                    }
+                                }
+                            ],
+                            queryParams: function queryParams(params) {   //设置查询参数
+                                var param = {
+                                    //加上csrf
+                                    csrfmiddlewaretoken :$("input[name='csrfmiddlewaretoken']").val(),
+                                    pageNumber: params.pageNumber,
+                                    pageSize: params.pageSize,
+                                    orderNum : $("#orderNum").val(),
+                                    siteName : $("#search_name").val(),
+                                    channel  : $("#search_channel").val(),
+                                    test_status : $("#search_offline_btn").val(),
+                                    have_stop : $("#search_stoped_btn").val(),
+                                };
+                                // console.log(param)
+                                return param;
+                            }
+                        });
+                    }
+                    $(document).ready(function () {
+                        //调用函数，初始化表格
+                        initTable();
+                    // $('#search_off_line_btn').click()
+                        //当点击查询按钮的时候执行
+                        $("#search_offline_btn").bind("click",function () {
+                            $("#search_stoped_btn").val(0)
+                            $("#search_offline_btn").val(0)
+                            console.log($("#search_offline_btn").val())
+                            $('#table').bootstrapTable('refresh')
+                        });
+                        $("#search_stoped_btn").bind("click",function () {
+                            $("#search_stoped_btn").val(1)
+                            $('#table').bootstrapTable('refresh')
+                        });
+                        $("#search_btn").bind("click", function(){
+                            $("#search_offline_btn").val(1)
+                            $("#search_stoped_btn").val(0)
+                            $('#table').bootstrapTable('refresh')
+                        });
+                    });
+
+                    function do_line_option(option_name,URL,site_name, channel) {
+                        console.log(option_name,URL,site_name, channel)
+                        $.ajax({
+                            url:'{% url 'online_operator' %}',
+                            type:'GET',
+                            dataType:'text',
+                            data: {
+                                'operate':option_name,
+                                'url':URL,
+                                'site_name': site_name,
+                                'channel': channel
+                            },
+                            success:function() {
+                                $('#table').bootstrapTable('refresh')
+                            }
+                        }
+                        )
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

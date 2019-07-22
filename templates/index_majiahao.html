@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+{% load staticfiles %}
+<link href="{%static "css/bootstrap/bootstrap.min.css" %}" rel="stylesheet" type="text/css" >
+<link href="{%static "css/bootstrap/bootstrap-table.css" %}" rel="stylesheet" type="text/css" >
+<link href="{%static "css/adstyle.css" %}" rel="stylesheet" type="text/css" />
+
+{% include "header.html" %}
+{% include 'menu.html' %}
+{% csrf_token %}
+<body>
+<div class="home">
+    <div class="home_right">
+        <div class="homepage">
+            <div class="pagename"><p>马甲号信息列表</p></div>
+            <!--<div class="dangqianweizhi"><p>首页</p></div>-->
+        </div>
+        <div class="user_hr">
+        </div>
+        <div class="user_list">
+            <div class="user_list_ls">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        查询条件
+                    </div>
+                   <div class="panel-body form-group" style="margin-bottom:0px;">
+                        <label class="col-sm-1 control-label" style="text-align: right; margin-top:10px;white-space: nowrap">马甲号：</label>
+                        <div class="col-sm-4">
+                            <!--<input type="text" class="form-control" name="Name" id="search_name"/>-->
+                            <input type="text" class="form-control" name="Name" id="search_name"/>
+                        </div>
+                        <div class="col-sm-1 col-sm-offset-1">
+                            <button class="btn btn-primary" id="search_btn">查询</button>
+                        </div>
+                        <div class="col-lg-12 url-wrapper"></div>
+                        <label class="col-sm-1 control-label" style="text-align: right; margin-top:10px;white-space: nowrap">文件上传：</label>
+                        <div class="col-sm-4">
+                            <input type="file" class="form-control" name="upload_file" id="upload_file"/>
+                            <!--<form method="post" action="/upload/" enctype="multipart/form-data">-->
+                                <!--<input type="file" class="form-control" name="upload_file" id="upload_file"/>-->
+                            <!--</form>-->
+                        </div>
+                        <div class="col-sm-1 col-sm-offset-1">
+                            <button class="btn btn-primary" id="upload_btn" onclick="upload()">上传</button>
+                        </div>
+                     </div>
+                </div>
+
+                <table class="table table-hover" id="table"></table>
+                <script src="{%static "js/bootstrap/jquery.min.js" %}"></script>
+                <script src="{%static "js/bootstrap/bootstrap.min.js" %}"></script>
+                <script src="{%static "js/bootstrap/bootstrap-table.js" %}"></script>
+                <script src="{%static "js/bootstrap/bootstrap-table-editable.js" %}"></script>
+                <script src="{%static "js/bootstrap/bootstrap-table-zh-CN.js" %}"></script>
+                <script type="text/javascript">
+                    function initTable() {
+                        $('#table').bootstrapTable({
+                            method: "post",  //使用post请求到服务器获取数据
+                            contentType: "application/x-www-form-urlencoded",//必须要有！！！！
+                            dataType: "json",
+                            cache: false,
+                            url:'{% url 'majiahao' %}',
+                            toolbar: '#mytab',//指定工具栏
+                            striped: true,  //表格显示条纹
+                            dataField: "rows",
+                            pagination: true, //启动分页
+                            pageSize: 10,  //每页显示的记录数
+                            pageNumber:1, //当前第几页
+                            pageList: [5, 10, 15, 20, 25],  //记录数可选列表
+                            // search: true,  //是否启用查询#}
+                            // showColumns: true,  //显示下拉框勾选要显示的列#}
+                            // showRefresh: true,  //显示刷新按钮#}
+                            sidePagination: "server", //表示服务端请求
+                            //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
+                            //设置为limit可以获取limit, offset, search, sort, order
+                            queryParamsType : "undefined",
+                            clickToSelect: true,//是否启用点击选中行
+                            toolbarAlign:'left',//工具栏对齐方式
+                            buttonsAlign:'left',//按钮对齐方式
+                            columns:[
+                                {
+                                    title:'马甲号',
+                                    field:'majiahao',
+                                    align:'center',
+                                    valign:'middle',
+                                    sortable:false
+                                },
+                                {
+                                    title: '操作',
+                                    field: 'majiahao',
+                                    align: 'center',
+                                    valign: 'middle',
+                                    sortable:false,
+                                    // 列数据格式化
+                                    // formatter:operateFormatter
+                                    formatter: function (value, row) {
+                                        console.log(row)
+                                        var e1 = '<a href="#" mce_href="#" onclick=\'majiahao_delete("' + row.majiahao + '")\' style="text-align: center; vertical-align: middle; "> 删除 </a>';
+                                        return e1;
+                                    }
+                                }
+                            ],
+                            queryParams: function queryParams(params) {   //设置查询参数
+                                var param = {
+                                    //加上csrf
+                                    csrfmiddlewaretoken :$("input[name='csrfmiddlewaretoken']").val(),
+                                    pageNumber: params.pageNumber,
+                                    pageSize: params.pageSize,
+                                    orderNum : $("#orderNum").val(),
+                                    opt:'query',
+                                    majiahao : $("#search_name").val(),
+                                };
+                                // console.log(param)
+                                return param;
+                            }
+                        });
+                    }
+                    $(document).ready(function () {
+                        //调用函数，初始化表格
+                        initTable();
+                    // $('#search_off_line_btn').click()
+                        //当点击查询按钮的时候执行
+                        $("#search_btn").bind("click", function(){
+                            $('#table').bootstrapTable('refresh')
+                        });
+                    });
+
+                    function upload() {
+                        var file = $('#upload_file')[0].files[0];
+                        console.log(file)
+                        if(file==undefined){
+                            alert('上传文件为空');
+                            return
+                        }
+                        var form = new FormData()
+                        form.append('file',file);
+
+                        $.ajax({
+                            csrfmiddlewaretoken :$("input[name='csrfmiddlewaretoken']").val(),
+                            url:'{% url 'majiahao' %}',
+                            type:'POST',
+                            data:form,
+                            processData:false,
+                            contentType:false,
+                            success:function (arg) {
+                                console.log('最终结果：'+arg)
+                                if(arg=='success'){
+                                    alert('上传文件成功！')
+                                }else{
+                                    alert('上传文件失败！')
+                                }
+                                console.log('upload success!!!')
+                            },
+                            error:function () {
+                                alert('上传文件出错！')
+                            }
+                        })
+                    }
+
+                    function majiahao_delete(majiahao_name) {
+                        console.log(majiahao_name)
+                        $.ajax({
+                            url:'{% url 'majiahao' %}',
+                            type:'GET',
+                            dataType:'text',
+                            data: {
+                                opt:'delete',
+                                majiahao:majiahao_name
+                            },
+                            success:function() {
+                                $('#table').bootstrapTable('refresh')
+                            }
+                        }
+                        )
+                    }
+
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

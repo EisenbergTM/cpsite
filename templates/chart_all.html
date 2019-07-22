@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+{% load staticfiles %}
+<link href="{%static "css/bootstrap/bootstrap.min.css" %}" rel="stylesheet" type="text/css" >
+<link href="{%static "css/bootstrap/bootstrap-table.css" %}" rel="stylesheet" type="text/css" >
+<link href="{%static "css/adstyle.css" %}" rel="stylesheet" type="text/css" />
+
+{% include "header.html" %}
+{% include 'menu.html' %}
+{% csrf_token %}
+<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            /* css 代码  */
+        </style>
+    <!--<script src="{%static 'js/highcharts.js' %}"></script>-->
+    <script src="{%static 'js/highcharts_1.js' %}"></script>
+    <script src="{%static 'js/highcharts-zh_CN.js' %}"></script>
+    <script src="{%static 'js/highcharts-more.js' %}"></script>
+    <!--<script src="https://img.highcharts.com.cn/highcharts/highcharts-more.js"></script>-->
+    <!--<script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>-->
+
+    <div id="container_all_type" style="width: 80%; height: 400px; margin-top: 10%;margin-left: 20%"></div>
+    <div id="container_all_complicate" style="width: 80%; height: 400px; margin-top: 10%;margin-left: 20%"></div>
+    <div id="wrapper" style="margin-left: 20%">
+            <button id="plain">普通</button>
+            <button id="inverted">反转</button>
+            <button id="polar">饼状</button>
+    </div>
+    <!--<div id="container_from_source" style="width: 80%; height: 400px; margin-top: 10%;margin-left: 20%"></div>-->
+    <br><br>
+    <input value="{{ categories }}" style="display: none" id="categories">
+    <input value="{{ series }}" style="display: none" id="series">
+
+    <input value="{{ category_complicate }}" style="display: none" id="category_complicate">
+    <input value="{{ series_complicate }}" style="display: none" id="series_complicate">
+    <!--<input value="{{ series }}" style="display: none" id="series">-->
+    <script>
+    var categories = $('#categories').val().split('\', \'')
+    var series = JSON.parse(
+        $('#series').val()
+    )
+
+    var categories_complicate = JSON.parse($('#category_complicate').val())
+    var data_complicate = JSON.parse($('#series_complicate').val())
+
+
+        var chart = Highcharts.chart('container_all_type',{
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'qiyu按类型分类日抓取量'
+    },
+    subtitle: {
+        text: ''
+    },
+    xAxis: {
+        categories: categories,
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: '入库量（Num）'
+        }
+    },
+    tooltip: {
+        // head + 每个 point + footer 拼接成完整的 table
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+        '<td style="padding:0"><b>{point.y:.1f} 条</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            borderWidth: 0
+        }
+    },
+    series:series
+});
+
+    var chart_1 = Highcharts.chart('container_all_complicate', {
+		title: {
+				text: 'qiyu总量'
+		},
+		subtitle: {
+				text: '包含图文，视频，音频，图集'
+		},
+		xAxis: {
+		    categories:categories_complicate
+				// categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+		},
+		series: [{
+				type: 'column',
+				colorByPoint: true,
+                data:data_complicate,
+				// data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+				showInLegend: false
+		}]
+});
+// 给 wrapper 添加点击事件
+Highcharts.addEvent(document.getElementById('wrapper'), 'click', function(e) {
+		var target = e.target,
+				button = null;
+		if(target.tagName === 'BUTTON') { // 判断点的是否是 button
+				button = target.id;
+				switch(button) {
+						case 'plain':
+								chart_1.update({
+										chart: {
+												inverted: false,
+												polar: false
+										},
+										subtitle: {
+												text: '普通'
+										}
+								});
+								break;
+						case 'inverted':
+								chart_1.update({
+										chart: {
+												inverted: true,
+												polar: false
+										},
+										subtitle: {
+												text: '反转'
+										}
+								});
+								break;
+						case 'polar':
+								chart_1.update({
+										chart: {
+												inverted: false,
+												polar: true
+										},
+										subtitle: {
+												text: '饼状'
+										}
+								});
+								break;
+				}
+		}
+});
+
+
+    </script>
+
+
+
+</body>
+</html>
